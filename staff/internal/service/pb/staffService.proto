@@ -1,0 +1,17 @@
+syntax="proto3";
+package pb;
+option go_package="/internal/service;service";
+import "staffModels.proto";
+
+message StaffRequest{
+  string StaffName=1;
+  string Password=2;
+}
+
+message StaffDetailResponse{
+  StaffModel StaffDetail=1;
+  uint32 Code=2;
+}
+service StaffService{
+  rpc StaffLogin(StaffRequest) returns(StaffDetailResponse);
+}

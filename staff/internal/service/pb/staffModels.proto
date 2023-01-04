@@ -1,23 +1,13 @@
 syntax="proto3";
 package pb;
 option go_package="/internal/service;service";
-import "google/protobuf/wrappers.proto";
 
-
-service StaffInfo{
-  rpc addStaff(Staff) returns (google.protobuf.StringValue);
-  rpc getOneStaff(StaffId) returns (Staff);
-  rpc getAllStaff(google.protobuf.StringValue) returns (stream Staff);
-}
 
 message StaffModel{
   string name=1;
-  string identity=2;
-  string email=3;
-  string position=4;
-  string store_identity=5;
-}
-
-message StaffId{
-  string value=1;
+  string staff_name=2;
+  string identity=3;
+  string email=4;
+  string position=5;
+  string store_identity=6;
 }
