@@ -13,9 +13,6 @@ mysql:
   password: 1819332785
   charset: utf8mb4
 
-etcd:
-  address: 127.0.0.1:2379
-
 redis:
   address: 127.0.0.1:6379
   password:

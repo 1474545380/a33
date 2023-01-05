@@ -14,7 +14,7 @@ func NewStaffService() *StaffService {
 	return &StaffService{}
 }
 
-// 用户登录
+// StaffLogin 员工登录
 func (*StaffService) StaffLogin(ctx context.Context, req *service.StaffRequest) (resp *service.StaffDetailResponse, err error) {
 	var staff repository.Staff
 	resp = new(service.StaffDetailResponse)
@@ -26,4 +26,46 @@ func (*StaffService) StaffLogin(ctx context.Context, req *service.StaffRequest) 
 	}
 	resp.StaffDetail = repository.BuildStaff(staff)
 	return resp, nil
+}
+
+// StaffRegister 员工注册
+func (*StaffService) StaffRegister(ctx context.Context, req *service.StaffRequest) (resp *service.StaffDetailResponse, err error) {
+	var staff repository.Staff
+	resp = new(service.StaffDetailResponse)
+	resp.Code = e.Success
+	staff, err = staff.StaffCreat(req)
+	if err != nil {
+		resp.Code = e.Error
+		return resp, err
+	}
+	resp.StaffDetail = repository.BuildStaff(staff)
+	return resp, err
+}
+
+// StaffDetails 员工详细信息
+func (*StaffService) StaffDetails(ctx context.Context, req *service.StaffRequest) (resp *service.StaffDetailResponse, err error) {
+	var staff repository.Staff
+	resp = new(service.StaffDetailResponse)
+	resp.Code = e.Success
+	staff, err = staff.StaffDetailGet(req)
+	if err != nil {
+		resp.Code = e.Error
+		return resp, err
+	}
+	resp.StaffDetail = repository.BuildStaff(staff)
+	return resp, err
+}
+
+// StaffDetailsModify 修改员工详细信息
+func (*StaffService) StaffDetailsModify(ctx context.Context, req *service.StaffRequest) (resp *service.StaffDetailResponse, err error) {
+	var staff repository.Staff
+	resp = new(service.StaffDetailResponse)
+	resp.Code = e.Success
+	staff, err = staff.StaffDetailChange(req)
+	if err != nil {
+		resp.Code = e.Error
+		return resp, err
+	}
+	resp.StaffDetail = repository.BuildStaff(staff)
+	return resp, err
 }

@@ -6,8 +6,9 @@ option go_package="/internal/service;service";
 message StaffModel{
   string name=1;
   string staff_name=2;
-  string identity=3;
-  string email=4;
-  string position=5;
-  string store_identity=6;
+  string password=3;
+  string identity=4;
+  string email=5;
+  string position=6;
+  string store_identity=7;
 }

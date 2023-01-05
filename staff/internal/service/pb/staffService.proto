@@ -6,6 +6,11 @@ import "staffModels.proto";
 message StaffRequest{
   string StaffName=1;
   string Password=2;
+  string name=3;
+  string email=4;
+  string position=5;
+  string store_identity=6;
+  string identity=7;
 }
 
 message StaffDetailResponse{
@@ -14,4 +19,8 @@ message StaffDetailResponse{
 }
 service StaffService{
   rpc StaffLogin(StaffRequest) returns(StaffDetailResponse);
+  rpc StaffRegister(StaffRequest) returns(StaffDetailResponse);
+  rpc StaffDetails(StaffRequest) returns(StaffDetailResponse);
+  rpc StaffDetailsModify(StaffRequest) returns(StaffDetailResponse);
+  rpc StaffPreferenceModify(StaffRequest) returns(StaffDetailResponse);
 }
