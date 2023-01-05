@@ -61,7 +61,7 @@ func (*StaffService) StaffDetailsModify(ctx context.Context, req *service.StaffR
 	var staff repository.Staff
 	resp = new(service.StaffDetailResponse)
 	resp.Code = e.Success
-	staff, err = staff.StaffDetailChange(req)
+	err = staff.StaffDetailChange(req)
 	if err != nil {
 		resp.Code = e.Error
 		return resp, err
