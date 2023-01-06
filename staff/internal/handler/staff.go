@@ -69,3 +69,7 @@ func (*StaffService) StaffDetailsModify(ctx context.Context, req *service.StaffR
 	resp.StaffDetail = repository.BuildStaff(staff)
 	return resp, err
 }
+
+func (*StaffService) StaffPreferenceModify(ctx context.Context, req *service.StaffRequest) (resp *service.StaffDetailResponse, err error) {
+
+}

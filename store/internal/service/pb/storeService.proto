@@ -1,0 +1,23 @@
+syntax="proto3";
+package pb;
+option go_package="/internal/service;service";
+import "storeModels.proto";
+
+message StoreRequest{
+  string StaffName=1;
+  string Password=2;
+  string name=3;
+  string email=4;
+  string position=5;
+  string store_identity=6;
+  string identity=7;
+}
+
+message StoreDetailResponse{
+  StoreModel StaffDetail=1;
+  uint32 Code=2;
+}
+service StaffService{
+  rpc StaffLogin(StoreRequest) returns(StoreDetailResponse);
+
+}
