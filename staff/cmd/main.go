@@ -5,7 +5,7 @@ import (
 	"staff/internal/repository"
 )
 
-func main()  {
+func main() {
 	config.InitConfig()
 	repository.InitDB()
 }

@@ -70,6 +70,30 @@ func (*StaffService) StaffDetailsModify(ctx context.Context, req *service.StaffR
 	return resp, err
 }
 
-func (*StaffService) StaffPreferenceModify(ctx context.Context, req *service.StaffRequest) (resp *service.StaffDetailResponse, err error) {
+// StaffPreference 获取员工偏好信息
+func (*StaffService) StaffPreference(ctx context.Context, req *service.StaffRequest) (resp *service.StaffPreferenceResponse, err error) {
+	var staffPreference repository.StaffPreference
+	resp = new(service.StaffPreferenceResponse)
+	resp.Code = e.Success
+	staffPreferenceDetail, err := staffPreference.StaffPreferenceGet(req)
+	if err != nil {
+		resp.Code = e.Error
+		return resp, err
+	}
+	resp.StaffPreferenceDetail = repository.BuildStaffPreference(staffPreferenceDetail)
+	return resp, err
+}
 
+// StaffPreferenceModify 修改员工偏好信息
+func (*StaffService) StaffPreferenceModify(ctx context.Context, req *service.StaffPreferenceRequest) (resp *service.StaffPreferenceResponse, err error) {
+	var staffPreference repository.StaffPreference
+	resp = new(service.StaffPreferenceResponse)
+	resp.Code = e.Success
+	err = staffPreference.StaffPreferenceChange(req)
+	if err != nil {
+		resp.Code = e.Error
+		return resp, err
+	}
+	resp.StaffDetail = repository.BuildStaff(staff)
+	return resp, err
 }

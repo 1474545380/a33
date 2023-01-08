@@ -12,3 +12,10 @@ message StaffModel{
   string position=6;
   string store_identity=7;
 }
+
+message StaffPreferenceModel{
+  string staff_preference_identity=1;
+  string preference_type=2;
+  string staff_identity=3;
+  string preference_value=4;
+}
