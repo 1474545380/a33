@@ -4,20 +4,18 @@ option go_package="/internal/service;service";
 import "storeModels.proto";
 
 message StoreRequest{
-  string StaffName=1;
-  string Password=2;
-  string name=3;
-  string email=4;
-  string position=5;
-  string store_identity=6;
-  string identity=7;
+  string identity=1;
+  string name=2;
+  string address=3;
+  int32 size=4;
 }
 
 message StoreDetailResponse{
-  StoreModel StaffDetail=1;
+  StoreModel StoreDetail=1;
   uint32 Code=2;
 }
-service StaffService{
-  rpc StaffLogin(StoreRequest) returns(StoreDetailResponse);
-
+service StoreService{
+  rpc StoreFill(StoreRequest) returns(StoreDetailResponse);
+  rpc StoreDetail(StoreRequest) returns(StoreDetailResponse);
+  rpc StoreDetailModify(StoreRequest) returns(StoreDetailResponse);
 }

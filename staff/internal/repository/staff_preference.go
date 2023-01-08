@@ -28,6 +28,24 @@ func (staffPreference *StaffPreference) StaffPreferenceGet(req *service.StaffReq
 	return staffPreferenceDetail, nil
 }
 
+// StaffPreferenceAdd 添加员工偏好信息
+func (staffPreference *StaffPreference) StaffPreferenceAdd(req *service.StaffPreferenceRequest) error {
+	if req.StaffIdentity == "" || req.StaffPreferenceIdentity == "" || req.PreferenceType == "" || req.PreferenceValue == "" {
+		return errors.New("InvalidParams")
+	}
+	staffPreferenceDetail := StaffPreference{
+		StaffPreferenceIdentity: req.StaffPreferenceIdentity,
+		PreferenceType:          req.PreferenceType,
+		StaffIdentity:           req.StaffIdentity,
+		PreferenceValue:         req.PreferenceValue,
+	}
+	err := DB.Create(&staffPreferenceDetail).Error
+	if err != nil {
+		return errors.New("data find error")
+	}
+	return err
+}
+
 // StaffPreferenceChange 修改员工偏好信息
 func (staffPreference *StaffPreference) StaffPreferenceChange(req *service.StaffPreferenceRequest) error {
 	if req.StaffPreferenceIdentity == "" {

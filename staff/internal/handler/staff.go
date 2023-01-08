@@ -84,6 +84,19 @@ func (*StaffService) StaffPreference(ctx context.Context, req *service.StaffRequ
 	return resp, err
 }
 
+// StaffPreferenceAdd 添加员工偏好信息
+func (*StaffService) StaffPreferenceAdd(ctx context.Context, req *service.StaffPreferenceRequest) (resp *service.StaffPreferenceResponse, err error) {
+	var staffPreference repository.StaffPreference
+	resp = new(service.StaffPreferenceResponse)
+	resp.Code = e.Success
+	err = staffPreference.StaffPreferenceAdd(req)
+	if err != nil {
+		resp.Code = e.Error
+		return resp, err
+	}
+	return resp, err
+}
+
 // StaffPreferenceModify 修改员工偏好信息
 func (*StaffService) StaffPreferenceModify(ctx context.Context, req *service.StaffPreferenceRequest) (resp *service.StaffPreferenceResponse, err error) {
 	var staffPreference repository.StaffPreference
@@ -94,6 +107,5 @@ func (*StaffService) StaffPreferenceModify(ctx context.Context, req *service.Sta
 		resp.Code = e.Error
 		return resp, err
 	}
-	resp.StaffDetail = repository.BuildStaff(staff)
 	return resp, err
 }

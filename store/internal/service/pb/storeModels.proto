@@ -4,6 +4,8 @@ option go_package="/internal/service;service";
 
 
 message StoreModel{
-  string name=1;
-
+  string identity=1;
+  string name=2;
+  string address=3;
+  int32 size=4;
 }
