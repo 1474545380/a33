@@ -36,5 +36,5 @@ service StaffService{
   rpc StaffDetailsModify(StaffRequest) returns(StaffDetailResponse);
   rpc StaffPreference(StaffRequest) returns(StaffPreferenceResponse);
   rpc StaffPreferenceFill(StaffPreferenceRequest) returns(StaffPreferenceResponse);
-  rpc StaffPreferenceModify(StaffPreferenceRequest) returns(StaffDetailResponse);
+  rpc StaffPreferenceModify(StaffPreferenceRequest) returns(StaffPreferenceResponse);
 }

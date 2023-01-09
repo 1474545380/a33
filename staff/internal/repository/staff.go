@@ -73,7 +73,14 @@ func (staff *Staff) StaffDetailChange(req *service.StaffRequest) error {
 	if req.Email == "" || req.Identity == "" || req.Name == "" || req.StoreIdentity == "" || req.Position == "" {
 		return errors.New("incomplete information")
 	}
-	err := DB.Omit("password").Where("identity = ?", req.Identity).Updates(req).Error
+	s := Staff{}
+	err := DB.Where("identity = ?", req.Identity).Take(&s)
+	s.Name = req.Name
+	s.Email = req.Email
+	s.Position = req.Position
+	s.Password = req.Password
+	s.StoreIdentity = req.StoreIdentity
+	DB.Save(&s)
 	if err != nil {
 		return errors.New("data change error")
 	}

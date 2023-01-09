@@ -51,7 +51,12 @@ func (staffPreference *StaffPreference) StaffPreferenceChange(req *service.Staff
 	if req.StaffPreferenceIdentity == "" {
 		return errors.New("InvalidParams")
 	}
-	err := DB.Where("staff_preference_identity = ?", req.StaffPreferenceIdentity).Updates(req).Error
+	s := StaffPreference{}
+	err := DB.Where("staff_preference_identity = ?", req.StaffPreferenceIdentity).Take(&s).Error
+	s.StaffIdentity = req.StaffIdentity
+	s.PreferenceType = req.PreferenceType
+	s.PreferenceValue = req.PreferenceValue
+	DB.Save(&s)
 	if err != nil {
 		return errors.New("data update error")
 	}

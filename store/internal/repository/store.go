@@ -15,19 +15,19 @@ type Store struct {
 	Size     uint64 `grom:"column:size;type:int(100);" json:"size"`             //平方米
 }
 
-// StoreCreat 添加商店
+// StoreCreat 添加店铺
 func (s Store) StoreCreat(req *service.StoreRequest) (store Store, err error) {
 	if req.Name == "" || req.Size == 0 || req.Address == "" {
 		return Store{}, errors.New("InvalidParams")
 	}
-	var count int64
-	err = DB.Where("staff_name = ?", req.Name).Count(&count).Error
-	if err != nil {
-		return Store{}, errors.New("creat error")
-	}
-	if count != 0 {
-		return Store{}, errors.New("store is exist")
-	}
+	//var count int64
+	//err = DB.Where("name = ?", req.Name).Count(&count).Error
+	//if err != nil {
+	//	return Store{}, errors.New("creat error")
+	//}
+	//if count != 0 {
+	//	return Store{}, errors.New("store is exist")
+	//}
 	storeIdentity := help.GetUUID()
 	store = Store{
 		Identity: storeIdentity,
@@ -40,6 +40,36 @@ func (s Store) StoreCreat(req *service.StoreRequest) (store Store, err error) {
 		return Store{}, errors.New("store creat error")
 	}
 	return store, err
+}
+
+// StoreDetailChange 店铺信息修改
+func (s Store) StoreDetailChange(req *service.StoreRequest) (Store, error) {
+	if req.Identity == "" || req.Name == "" || req.Size == 0 || req.Address == "" {
+		return Store{}, errors.New("InvalidParams")
+	}
+	store := Store{}
+	DB.Where("identity = ?", req.Identity).Take(&store)
+	store.Address = req.Address
+	store.Size = req.Size
+	store.Name = req.Name
+	err := DB.Save(&store).Error
+	if err != nil {
+		return Store{}, errors.New("store update error")
+	}
+	return store, err
+}
+
+// StoreGetByIdentity 通过identity获取店铺信息
+func (s Store) StoreGetByIdentity(req *service.StoreRequest) (Store, error) {
+	if req.Identity == "" {
+		return Store{}, errors.New("InvalidParams")
+	}
+	storeDetail := new(Store)
+	err := DB.Where("identity = ?", req.Identity).Find(&storeDetail).Error
+	if err != nil {
+		return Store{}, err
+	}
+	return *storeDetail, err
 }
 
 // BuildStore 序列化Store

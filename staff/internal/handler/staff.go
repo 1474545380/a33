@@ -4,10 +4,12 @@ import (
 	"context"
 	"staff/internal/repository"
 	"staff/internal/service"
+	pb "staff/internal/service"
 	"staff/pkg/e"
 )
 
 type StaffService struct {
+	pb.UnimplementedStaffServiceServer
 }
 
 func NewStaffService() *StaffService {
