@@ -7,7 +7,7 @@ message StoreRequest{
   string identity=1;
   string name=2;
   string address=3;
-  int32 size=4;
+  uint64 size=4;
 }
 
 message StoreDetailResponse{
@@ -16,6 +16,6 @@ message StoreDetailResponse{
 }
 service StoreService{
   rpc StoreFill(StoreRequest) returns(StoreDetailResponse);
-  rpc StoreDetail(StoreRequest) returns(StoreDetailResponse);
+  rpc StoreDetailByIdentity(StoreRequest) returns(StoreDetailResponse);
   rpc StoreDetailModify(StoreRequest) returns(StoreDetailResponse);
 }

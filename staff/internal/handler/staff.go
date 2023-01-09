@@ -25,7 +25,7 @@ func (*StaffService) StaffLogin(ctx context.Context, req *service.StaffRequest) 
 		return resp, err
 	}
 	resp.StaffDetail = repository.BuildStaff(staff)
-	return resp, nil
+	return resp, err
 }
 
 // StaffRegister 员工注册
