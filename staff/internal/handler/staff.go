@@ -50,11 +50,11 @@ func (*StaffService) StaffDetails(ctx context.Context, req *service.StaffRequest
 	resp = new(service.StaffDetailResponse)
 	resp.Code = e.Success
 	staff, err = staff.StaffDetailGet(req)
+	resp.StaffDetail = repository.BuildDetailStaff(staff)
 	if err != nil {
 		resp.Code = e.Error
 		return resp, err
 	}
-	resp.StaffDetail = repository.BuildStaff(staff)
 	return resp, err
 }
 

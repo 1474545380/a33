@@ -21,7 +21,7 @@ func (staffPreference *StaffPreference) StaffPreferenceGet(req *service.StaffReq
 		return []StaffPreference{}, errors.New("InvalidParams")
 	}
 	var staffPreferenceDetail []StaffPreference
-	err := DB.Where("staff_identity = ?", req.Identity).Find(&staffPreferenceDetail).Error
+	err := DB.Model(&StaffPreference{}).Where("staff_identity = ?", req.Identity).Find(&staffPreferenceDetail).Error
 	if err != nil {
 		return []StaffPreference{}, errors.New("data find error")
 	}
@@ -39,7 +39,7 @@ func (staffPreference *StaffPreference) StaffPreferenceAdd(req *service.StaffPre
 		StaffIdentity:           req.StaffIdentity,
 		PreferenceValue:         req.PreferenceValue,
 	}
-	err := DB.Create(&staffPreferenceDetail).Error
+	err := DB.Model(&StaffPreference{}).Create(&staffPreferenceDetail).Error
 	if err != nil {
 		return errors.New("data find error")
 	}
@@ -52,11 +52,11 @@ func (staffPreference *StaffPreference) StaffPreferenceChange(req *service.Staff
 		return errors.New("InvalidParams")
 	}
 	s := StaffPreference{}
-	err := DB.Where("staff_preference_identity = ?", req.StaffPreferenceIdentity).Take(&s).Error
+	err := DB.Model(&StaffPreference{}).Where("staff_preference_identity = ?", req.StaffPreferenceIdentity).Take(&s).Error
 	s.StaffIdentity = req.StaffIdentity
 	s.PreferenceType = req.PreferenceType
 	s.PreferenceValue = req.PreferenceValue
-	DB.Save(&s)
+	DB.Model(&StaffPreference{}).Save(&s)
 	if err != nil {
 		return errors.New("data update error")
 	}

@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"gorm.io/gorm"
+	"log"
 	"staff/internal/service"
 	"staff/pkg/help"
 )
@@ -21,7 +22,7 @@ type Staff struct {
 // CheckStaffExist 判断员工登录信息是否正确
 func (staff *Staff) CheckStaffExist(req *service.StaffRequest) bool {
 	password := help.GetMd5(req.Password)
-	if err := DB.Where("staff_name = ? and password = ?", req.Email, password).First(&staff).Error; err == gorm.ErrRecordNotFound {
+	if err := DB.Model(&Staff{}).Where("email = ? and password = ?", req.Email, password).First(&staff).Error; err == gorm.ErrRecordNotFound {
 		return false
 	}
 	return true
@@ -29,6 +30,9 @@ func (staff *Staff) CheckStaffExist(req *service.StaffRequest) bool {
 
 // ShowStaffInfo 获取员工信息
 func (staff *Staff) ShowStaffInfo(req *service.StaffRequest) error {
+	if req.Email == "" || req.Password == "" {
+		return errors.New("InvalidParams")
+	}
 	if exist := staff.CheckStaffExist(req); exist {
 		return nil
 	}
@@ -38,8 +42,10 @@ func (staff *Staff) ShowStaffInfo(req *service.StaffRequest) error {
 // StaffCreat 创建员工
 func (*Staff) StaffCreat(req *service.StaffRequest) (staff Staff, err error) {
 	var count int64
-	err = DB.Where("email = ?", req.Email).Count(&count).Error
+	log.Println(req)
+	err = DB.Model(&Staff{}).Where("email = ?", req.Email).Count(&count).Error
 	if err != nil {
+		log.Println(err)
 		return Staff{}, errors.New("creat error")
 	}
 	if count != 0 {
@@ -54,14 +60,18 @@ func (*Staff) StaffCreat(req *service.StaffRequest) (staff Staff, err error) {
 		Position:      req.Position,
 		StoreIdentity: req.StoreIdentity,
 	}
-	err = DB.Create(&staff).Error
+	err = DB.Model(&Staff{}).Create(&staff).Error
+	log.Println(err)
+	if err != nil {
+		return Staff{}, err
+	}
 	return staff, err
 }
 
 // StaffDetailGet 获取员工具体信息
 func (staff *Staff) StaffDetailGet(req *service.StaffRequest) (Staff, error) {
 	staffDetail := new(Staff)
-	err := DB.Omit("password").Where("identity = ?", req.Identity).Find(&staffDetail).Error
+	err := DB.Model(&Staff{}).Omit("password").Where("identity = ?", req.Identity).Find(&staffDetail).Error
 	if err != nil {
 		return Staff{}, err
 	}
@@ -71,16 +81,16 @@ func (staff *Staff) StaffDetailGet(req *service.StaffRequest) (Staff, error) {
 // StaffDetailChange 修改员工具体信息
 func (staff *Staff) StaffDetailChange(req *service.StaffRequest) error {
 	if req.Email == "" || req.Identity == "" || req.Name == "" || req.StoreIdentity == "" || req.Position == "" {
-		return errors.New("incomplete information")
+		return errors.New("InvalidParams")
 	}
 	s := Staff{}
-	err := DB.Where("identity = ?", req.Identity).Take(&s)
+	err := DB.Model(&Staff{}).Where("identity = ?", req.Identity).Take(&s)
 	s.Name = req.Name
 	s.Email = req.Email
 	s.Position = req.Position
 	s.Password = req.Password
 	s.StoreIdentity = req.StoreIdentity
-	DB.Save(&s)
+	DB.Model(&Staff{}).Save(&s)
 	if err != nil {
 		return errors.New("data change error")
 	}
@@ -90,7 +100,19 @@ func (staff *Staff) StaffDetailChange(req *service.StaffRequest) error {
 // BuildStaff 序列化Staff
 func BuildStaff(item Staff) *service.StaffModel {
 	staffModel := service.StaffModel{
-		StoreIdentity: item.Identity,
+		Identity: item.Identity,
+		Name:     item.Name,
+	}
+	return &staffModel
+}
+
+// BuildDetailStaff 序列化Staff详细信息
+func BuildDetailStaff(item Staff) *service.StaffModel {
+	staffModel := service.StaffModel{
+		Identity:      item.Identity,
+		Email:         item.Email,
+		Position:      item.Position,
+		StoreIdentity: item.StoreIdentity,
 		Name:          item.Name,
 	}
 	return &staffModel

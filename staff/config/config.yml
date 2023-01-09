@@ -2,17 +2,12 @@ server:
   domain: staff
   version: 1.0
   jwtSecret: FanOne
-  grpcAddress: "127.0.0.1:10001"
 
 mysql:
   driverName: mysql
   host: 127.0.0.1
-  prot: 3306
+  port: 3306
   database: a33
   username: root
   password: 1819332785
   charset: utf8mb4
-
-redis:
-  address: 127.0.0.1:6379
-  password:

@@ -35,7 +35,7 @@ func (s Store) StoreCreat(req *service.StoreRequest) (store Store, err error) {
 		Address:  req.Address,
 		Size:     req.Size,
 	}
-	err = DB.Create(&store).Error
+	err = DB.Model(&Store{}).Create(&store).Error
 	if err != nil {
 		return Store{}, errors.New("store creat error")
 	}
@@ -48,11 +48,11 @@ func (s Store) StoreDetailChange(req *service.StoreRequest) (Store, error) {
 		return Store{}, errors.New("InvalidParams")
 	}
 	store := Store{}
-	DB.Where("identity = ?", req.Identity).Take(&store)
+	DB.Model(&Store{}).Where("identity = ?", req.Identity).Take(&store)
 	store.Address = req.Address
 	store.Size = req.Size
 	store.Name = req.Name
-	err := DB.Save(&store).Error
+	err := DB.Model(&Store{}).Save(&store).Error
 	if err != nil {
 		return Store{}, errors.New("store update error")
 	}
@@ -65,7 +65,7 @@ func (s Store) StoreGetByIdentity(req *service.StoreRequest) (Store, error) {
 		return Store{}, errors.New("InvalidParams")
 	}
 	storeDetail := new(Store)
-	err := DB.Where("identity = ?", req.Identity).Find(&storeDetail).Error
+	err := DB.Model(&Store{}).Where("identity = ?", req.Identity).Find(&storeDetail).Error
 	if err != nil {
 		return Store{}, err
 	}
