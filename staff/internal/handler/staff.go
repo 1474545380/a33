@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"log"
 	"staff/internal/repository"
 	"staff/internal/service"
 	pb "staff/internal/service"
@@ -40,6 +41,21 @@ func (*StaffService) StaffRegister(ctx context.Context, req *service.StaffReques
 		resp.Code = e.Error
 		return resp, err
 	}
+	resp.StaffDetail = repository.BuildStaff(staff)
+	return resp, err
+}
+
+// StaffDelete 员工删除
+func (*StaffService) StaffDelete(ctx context.Context, req *service.StaffRequest) (resp *service.StaffDetailResponse, err error) {
+	var staff repository.Staff
+	resp = new(service.StaffDetailResponse)
+	resp.Code = e.Success
+	err = staff.StaffDelete(req)
+	if err != nil {
+		resp.Code = e.Error
+		return resp, err
+	}
+	log.Println(staff)
 	resp.StaffDetail = repository.BuildStaff(staff)
 	return resp, err
 }

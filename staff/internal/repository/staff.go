@@ -70,12 +70,12 @@ func (*Staff) StaffCreat(req *service.StaffRequest) (staff Staff, err error) {
 
 // StaffDetailGet 获取员工具体信息
 func (staff *Staff) StaffDetailGet(req *service.StaffRequest) (Staff, error) {
-	staffDetail := new(Staff)
-	err := DB.Model(&Staff{}).Omit("password").Where("identity = ?", req.Identity).Find(&staffDetail).Error
+	s := new(Staff)
+	err := DB.Model(&Staff{}).Omit("password").Where("identity = ?", req.Identity).Find(&s).Error
 	if err != nil {
 		return Staff{}, err
 	}
-	return *staffDetail, err
+	return *s, err
 }
 
 // StaffDetailChange 修改员工具体信息
@@ -84,7 +84,7 @@ func (staff *Staff) StaffDetailChange(req *service.StaffRequest) error {
 		return errors.New("InvalidParams")
 	}
 	s := Staff{}
-	err := DB.Model(&Staff{}).Where("identity = ?", req.Identity).Take(&s)
+	err := DB.Model(&Staff{}).Where("identity = ?", req.Identity).Take(&s).Error
 	s.Name = req.Name
 	s.Email = req.Email
 	s.Position = req.Position
@@ -94,7 +94,20 @@ func (staff *Staff) StaffDetailChange(req *service.StaffRequest) error {
 	if err != nil {
 		return errors.New("data change error")
 	}
-	return nil
+	return err
+}
+
+func (staff *Staff) StaffDelete(req *service.StaffRequest) error {
+	if req.Identity == "" {
+		return errors.New("InvalidParams")
+	}
+	s := Staff{}
+	err := DB.Model(&Staff{}).Where("identity = ?", req.Identity).Find(&s).Error
+	err = DB.Model(&Staff{}).Delete(&s).Error
+	if err != nil {
+		return errors.New("data delete error")
+	}
+	return err
 }
 
 // BuildStaff 序列化Staff

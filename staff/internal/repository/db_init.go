@@ -7,7 +7,6 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"log"
 	"strings"
 	"time"
 )
@@ -22,14 +21,13 @@ func InitDB() {
 	password := viper.GetString("mysql.password")
 	charset := viper.GetString("mysql.charset")
 	dsn := strings.Join([]string{username, ":", password, "@tcp(", host, ":", port, ")/", database, "?charset=" + charset + "&parseTime=true"}, "")
-	log.Println(dsn)
 	err := Database(dsn)
 	if err != nil {
 		panic(any(err))
 	}
 }
 
-// gorm定义
+// Database gorm定义
 func Database(dsn string) error {
 	var ormLogger logger.Interface
 	if gin.Mode() == "debug" {

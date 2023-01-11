@@ -29,9 +29,11 @@ message StaffPreferenceResponse{
   uint32 Code=2;
 }
 
+
 service StaffService{
   rpc StaffLogin(StaffRequest) returns(StaffDetailResponse);
   rpc StaffRegister(StaffRequest) returns(StaffDetailResponse);
+  rpc StaffDelete(StaffRequest) returns(StaffDetailResponse);
   rpc StaffDetails(StaffRequest) returns(StaffDetailResponse);
   rpc StaffDetailsModify(StaffRequest) returns(StaffDetailResponse);
   rpc StaffPreference(StaffRequest) returns(StaffPreferenceResponse);
