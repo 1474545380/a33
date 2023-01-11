@@ -5,9 +5,9 @@ server:
 
 mysql:
   driverName: mysql
-  host: 1.116.139.162
+  host: 127.0.0.1
   port: 3306
   database: a33
   username: root
-  password: 12345678
+  password: 1819332785
   charset: utf8mb4

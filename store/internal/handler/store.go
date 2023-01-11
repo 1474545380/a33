@@ -24,6 +24,7 @@ func (*StoreService) StoreFill(ctx context.Context, req *service.StoreRequest) (
 	store, err = store.StoreCreat(req)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StoreDetail = repository.BuildStore(store)
 		return resp, err
 	}
 	resp.StoreDetail = repository.BuildStore(store)
@@ -38,6 +39,7 @@ func (*StoreService) StoreDetailByIdentity(ctx context.Context, req *service.Sto
 	store, err = store.StoreGetByIdentity(req)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StoreDetail = repository.BuildStore(store)
 		return resp, err
 	}
 	resp.StoreDetail = repository.BuildStore(store)
@@ -52,6 +54,22 @@ func (*StoreService) StoreDetailModify(ctx context.Context, req *service.StoreRe
 	store, err = store.StoreDetailChange(req)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StoreDetail = repository.BuildStore(store)
+		return resp, err
+	}
+	resp.StoreDetail = repository.BuildStore(store)
+	return resp, err
+}
+
+// StoreDetailByStaffIdentity 通过员工identity查询店铺详细信息
+func (*StoreService) StoreDetailByStaffIdentity(ctx context.Context, req *service.StaffRequest) (resp *service.StoreDetailResponse, err error) {
+	var store repository.Store
+	resp = new(service.StoreDetailResponse)
+	resp.Code = e.Success
+	store, err = store.StoreGetByStaffIdentity(req)
+	if err != nil {
+		resp.Code = e.Error
+		resp.StoreDetail = repository.BuildStore(store)
 		return resp, err
 	}
 	resp.StoreDetail = repository.BuildStore(store)

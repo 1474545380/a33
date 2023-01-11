@@ -10,6 +10,15 @@ message StoreRequest{
   uint64 size=4;
 }
 
+message StaffRequest{
+  string password=1;
+  string name=2;
+  string email=3;
+  string position=4;
+  string store_identity=5;
+  string identity=6;
+}
+
 message StoreDetailResponse{
   StoreModel StoreDetail=1;
   uint32 Code=2;
@@ -18,4 +27,6 @@ service StoreService{
   rpc StoreFill(StoreRequest) returns(StoreDetailResponse);
   rpc StoreDetailByIdentity(StoreRequest) returns(StoreDetailResponse);
   rpc StoreDetailModify(StoreRequest) returns(StoreDetailResponse);
+  rpc StoreDetailByStaffIdentity(StaffRequest) returns(StoreDetailResponse);
+  rpc StoreInStaffByStoreIdentity(StoreRequest) returns(StoreDetailResponse);
 }

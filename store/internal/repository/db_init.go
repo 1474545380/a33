@@ -27,7 +27,7 @@ func InitDB() {
 	}
 }
 
-// gorm定义
+// Database gorm定义
 func Database(dsn string) error {
 	var ormLogger logger.Interface
 	if gin.Mode() == "debug" {

@@ -25,6 +25,7 @@ func (*StaffService) StaffLogin(ctx context.Context, req *service.StaffRequest) 
 	err = staff.ShowStaffInfo(req)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StaffDetail = repository.BuildStaff(staff)
 		return resp, err
 	}
 	resp.StaffDetail = repository.BuildStaff(staff)
@@ -39,6 +40,7 @@ func (*StaffService) StaffRegister(ctx context.Context, req *service.StaffReques
 	staff, err = staff.StaffCreat(req)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StaffDetail = repository.BuildStaff(staff)
 		return resp, err
 	}
 	resp.StaffDetail = repository.BuildStaff(staff)
@@ -53,6 +55,7 @@ func (*StaffService) StaffDelete(ctx context.Context, req *service.StaffRequest)
 	err = staff.StaffDelete(req)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StaffDetail = repository.BuildStaff(staff)
 		return resp, err
 	}
 	log.Println(staff)
@@ -69,6 +72,7 @@ func (*StaffService) StaffDetails(ctx context.Context, req *service.StaffRequest
 	resp.StaffDetail = repository.BuildDetailStaff(staff)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StaffDetail = repository.BuildDetailStaff(staff)
 		return resp, err
 	}
 	return resp, err
@@ -82,6 +86,7 @@ func (*StaffService) StaffDetailsModify(ctx context.Context, req *service.StaffR
 	err = staff.StaffDetailChange(req)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StaffDetail = repository.BuildStaff(staff)
 		return resp, err
 	}
 	resp.StaffDetail = repository.BuildStaff(staff)
@@ -96,6 +101,7 @@ func (*StaffService) StaffPreference(ctx context.Context, req *service.StaffRequ
 	staffPreferenceDetail, err := staffPreference.StaffPreferenceGet(req)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StaffPreferenceDetail = repository.BuildStaffPreference(staffPreferenceDetail)
 		return resp, err
 	}
 	resp.StaffPreferenceDetail = repository.BuildStaffPreference(staffPreferenceDetail)
@@ -107,11 +113,13 @@ func (*StaffService) StaffPreferenceAdd(ctx context.Context, req *service.StaffP
 	var staffPreference repository.StaffPreference
 	resp = new(service.StaffPreferenceResponse)
 	resp.Code = e.Success
-	err = staffPreference.StaffPreferenceAdd(req)
+	staffPreferenceDetail, err := staffPreference.StaffPreferenceAdd(req)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StaffPreferenceDetail[0] = repository.BuildNormalStaffPreference(staffPreferenceDetail)
 		return resp, err
 	}
+	resp.StaffPreferenceDetail[0] = repository.BuildNormalStaffPreference(staffPreferenceDetail)
 	return resp, err
 }
 
@@ -120,10 +128,12 @@ func (*StaffService) StaffPreferenceModify(ctx context.Context, req *service.Sta
 	var staffPreference repository.StaffPreference
 	resp = new(service.StaffPreferenceResponse)
 	resp.Code = e.Success
-	err = staffPreference.StaffPreferenceChange(req)
+	staffPreferenceDetail, err := staffPreference.StaffPreferenceChange(req)
 	if err != nil {
 		resp.Code = e.Error
+		resp.StaffPreferenceDetail[0] = repository.BuildNormalStaffPreference(staffPreferenceDetail)
 		return resp, err
 	}
+	resp.StaffPreferenceDetail[0] = repository.BuildNormalStaffPreference(staffPreferenceDetail)
 	return resp, err
 }

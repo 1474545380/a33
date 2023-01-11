@@ -25,13 +25,13 @@ func (staffPreference *StaffPreference) StaffPreferenceGet(req *service.StaffReq
 	if err != nil {
 		return []StaffPreference{}, errors.New("data find error")
 	}
-	return staffPreferenceDetail, nil
+	return staffPreferenceDetail, err
 }
 
 // StaffPreferenceAdd 添加员工偏好信息
-func (staffPreference *StaffPreference) StaffPreferenceAdd(req *service.StaffPreferenceRequest) error {
+func (staffPreference *StaffPreference) StaffPreferenceAdd(req *service.StaffPreferenceRequest) (StaffPreference, error) {
 	if req.StaffIdentity == "" || req.StaffPreferenceIdentity == "" || req.PreferenceType == "" || req.PreferenceValue == "" {
-		return errors.New("InvalidParams")
+		return StaffPreference{}, errors.New("InvalidParams")
 	}
 	staffPreferenceDetail := StaffPreference{
 		StaffPreferenceIdentity: req.StaffPreferenceIdentity,
@@ -41,15 +41,15 @@ func (staffPreference *StaffPreference) StaffPreferenceAdd(req *service.StaffPre
 	}
 	err := DB.Model(&StaffPreference{}).Create(&staffPreferenceDetail).Error
 	if err != nil {
-		return errors.New("data find error")
+		return StaffPreference{}, errors.New("data find error")
 	}
-	return err
+	return StaffPreference{}, err
 }
 
 // StaffPreferenceChange 修改员工偏好信息
-func (staffPreference *StaffPreference) StaffPreferenceChange(req *service.StaffPreferenceRequest) error {
+func (staffPreference *StaffPreference) StaffPreferenceChange(req *service.StaffPreferenceRequest) (StaffPreference, error) {
 	if req.StaffPreferenceIdentity == "" {
-		return errors.New("InvalidParams")
+		return StaffPreference{}, errors.New("InvalidParams")
 	}
 	s := StaffPreference{}
 	err := DB.Model(&StaffPreference{}).Where("staff_preference_identity = ?", req.StaffPreferenceIdentity).Take(&s).Error
@@ -58,12 +58,12 @@ func (staffPreference *StaffPreference) StaffPreferenceChange(req *service.Staff
 	s.PreferenceValue = req.PreferenceValue
 	DB.Model(&StaffPreference{}).Save(&s)
 	if err != nil {
-		return errors.New("data update error")
+		return StaffPreference{}, errors.New("data update error")
 	}
-	return nil
+	return StaffPreference{}, err
 }
 
-// BuildStaffPreference 序列化StaffPreference
+// BuildStaffPreference 序列化[]StaffPreference
 func BuildStaffPreference(item []StaffPreference) []*service.StaffPreferenceModel {
 	l := len(item)
 	staffPreferenceModel := make([]*service.StaffPreferenceModel, l)
@@ -74,4 +74,16 @@ func BuildStaffPreference(item []StaffPreference) []*service.StaffPreferenceMode
 		staffPreferenceModel[i].StaffIdentity = i2.StaffIdentity
 	}
 	return staffPreferenceModel
+}
+
+// BuildNormalStaffPreference 序列化staffpreference
+func BuildNormalStaffPreference(item StaffPreference) *service.StaffPreferenceModel {
+	staffPreferenceModel := service.StaffPreferenceModel{
+		StaffPreferenceIdentity: item.StaffPreferenceIdentity,
+		PreferenceType:          item.PreferenceType,
+		StaffIdentity:           item.StaffIdentity,
+		PreferenceValue:         item.PreferenceValue,
+	}
+	return &staffPreferenceModel
+
 }
