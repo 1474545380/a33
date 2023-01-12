@@ -28,5 +28,4 @@ service StoreService{
   rpc StoreDetailByIdentity(StoreRequest) returns(StoreDetailResponse);
   rpc StoreDetailModify(StoreRequest) returns(StoreDetailResponse);
   rpc StoreDetailByStaffIdentity(StaffRequest) returns(StoreDetailResponse);
-  rpc StoreInStaffByStoreIdentity(StoreRequest) returns(StoreDetailResponse);
 }

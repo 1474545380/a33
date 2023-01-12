@@ -7,6 +7,7 @@ func migration() {
 	//&Staff{},
 	//&Store{},
 	//&StaffPreference{},
+	//&SchedulRules{},
 	)
 	if err != nil {
 		fmt.Println("migration err", err)

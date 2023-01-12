@@ -3,18 +3,17 @@ package repository
 import (
 	"errors"
 	"gorm.io/gorm"
-	"log"
 	"store/internal/service"
 	"store/pkg/help"
 )
 
 type Store struct {
 	gorm.Model
-	Identity string  `grom:"column:identity;type:longtext(36);" json:"identity"` //员工表的唯一标识
-	Name     string  `grom:"column:name;type:varchar(100);" json:"name"`         //员工姓名
-	Address  string  `grom:"column:address;type:varchar(255);" json:"address"`   //门店地址
-	Size     uint64  `grom:"column:size;type:int(100);" json:"size"`             //平方米
-	Staffs   []Staff `gorm:"foreignKey:Identity;references:staff_identity"`      //关联用户基础表
+	Identity string `gorm:"column:identity;type:longtext;" json:"identity"`   //员工表的唯一标识
+	Name     string `gorm:"column:name;type:varchar(100);" json:"name"`       //员工姓名
+	Address  string `gorm:"column:address;type:varchar(255);" json:"address"` //门店地址
+	Size     uint64 `gorm:"column:size;type:int(100);" json:"size"`           //平方米
+	Staffs   *Staff `gorm:"foreignKey:store_identity;references:identity;"`   //联表
 }
 
 // StoreCreat 添加店铺
@@ -74,16 +73,16 @@ func (s Store) StoreGetByIdentity(req *service.StoreRequest) (Store, error) {
 	return *storeDetail, err
 }
 
+// StoreGetByStaffIdentity 通过用户唯一标识查找所属店铺
 func (s Store) StoreGetByStaffIdentity(req *service.StaffRequest) (Store, error) {
 	if req.Identity == "" {
 		return Store{}, errors.New("InvalidParams")
 	}
 	storeDetail := new(Store)
-	log.Println(req.Identity)
-	var count int64
-	tx := DB.Model(new(Store)).Preload("Staffs")
-	err := tx.Where("staff_identity = ?", req.Identity).Count(&count).Error
-	log.Println(count)
+	err := DB.Model(new(Store)).Preload("Staffs").
+		Joins("LEFT JOIN staff s ON s.store_identity = store.identity").
+		Where("s.identity = ?", req.Identity).
+		Find(&storeDetail).Error
 	if err != nil {
 		return Store{}, errors.New("date find error")
 	}

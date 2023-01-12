@@ -36,6 +36,7 @@ service StaffService{
   rpc StaffDelete(StaffRequest) returns(StaffDetailResponse);
   rpc StaffDetails(StaffRequest) returns(StaffDetailResponse);
   rpc StaffDetailsModify(StaffRequest) returns(StaffDetailResponse);
+//  rpc StoreInStaffByStoreIdentity(StoreRequest) returns(StoreDetailResponse);
   rpc StaffPreference(StaffRequest) returns(StaffPreferenceResponse);
   rpc StaffPreferenceFill(StaffPreferenceRequest) returns(StaffPreferenceResponse);
   rpc StaffPreferenceModify(StaffPreferenceRequest) returns(StaffPreferenceResponse);
