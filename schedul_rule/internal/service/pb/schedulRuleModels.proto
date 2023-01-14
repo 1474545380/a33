@@ -1,0 +1,11 @@
+syntax="proto3";
+package pb;
+option go_package="/internal/service;service";
+
+
+message SchedulRuleModel{
+  string identity=1;
+  string rule_type=2;
+  string store_identity=3;
+  string rule_date=4;
+}

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"log"
 	"staff/internal/repository"
 	"staff/internal/service"
 	pb "staff/internal/service"
@@ -58,7 +57,6 @@ func (*StaffService) StaffDelete(ctx context.Context, req *service.StaffRequest)
 		resp.StaffDetail = repository.BuildStaff(staff)
 		return resp, err
 	}
-	log.Println(staff)
 	resp.StaffDetail = repository.BuildStaff(staff)
 	return resp, err
 }
@@ -108,18 +106,18 @@ func (*StaffService) StaffPreference(ctx context.Context, req *service.StaffRequ
 	return resp, err
 }
 
-// StaffPreferenceAdd 添加员工偏好信息
-func (*StaffService) StaffPreferenceAdd(ctx context.Context, req *service.StaffPreferenceRequest) (resp *service.StaffPreferenceResponse, err error) {
+// StaffPreferenceInsert 添加员工偏好信息
+func (*StaffService) StaffPreferenceInsert(ctx context.Context, req *service.StaffPreferenceRequest) (resp *service.StaffPreferenceResponse, err error) {
 	var staffPreference repository.StaffPreference
 	resp = new(service.StaffPreferenceResponse)
 	resp.Code = e.Success
 	staffPreferenceDetail, err := staffPreference.StaffPreferenceAdd(req)
 	if err != nil {
 		resp.Code = e.Error
-		resp.StaffPreferenceDetail[0] = repository.BuildNormalStaffPreference(staffPreferenceDetail)
+		resp.StaffPreferenceDetail = append(resp.StaffPreferenceDetail, repository.BuildNormalStaffPreference(staffPreferenceDetail))
 		return resp, err
 	}
-	resp.StaffPreferenceDetail[0] = repository.BuildNormalStaffPreference(staffPreferenceDetail)
+	resp.StaffPreferenceDetail = append(resp.StaffPreferenceDetail, repository.BuildNormalStaffPreference(staffPreferenceDetail))
 	return resp, err
 }
 
@@ -131,9 +129,9 @@ func (*StaffService) StaffPreferenceModify(ctx context.Context, req *service.Sta
 	staffPreferenceDetail, err := staffPreference.StaffPreferenceChange(req)
 	if err != nil {
 		resp.Code = e.Error
-		resp.StaffPreferenceDetail[0] = repository.BuildNormalStaffPreference(staffPreferenceDetail)
+		resp.StaffPreferenceDetail = append(resp.StaffPreferenceDetail, repository.BuildNormalStaffPreference(staffPreferenceDetail))
 		return resp, err
 	}
-	resp.StaffPreferenceDetail[0] = repository.BuildNormalStaffPreference(staffPreferenceDetail)
+	resp.StaffPreferenceDetail = append(resp.StaffPreferenceDetail, repository.BuildNormalStaffPreference(staffPreferenceDetail))
 	return resp, err
 }

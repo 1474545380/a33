@@ -38,6 +38,6 @@ service StaffService{
   rpc StaffDetailsModify(StaffRequest) returns(StaffDetailResponse);
 //  rpc StoreInStaffByStoreIdentity(StoreRequest) returns(StoreDetailResponse);
   rpc StaffPreference(StaffRequest) returns(StaffPreferenceResponse);
-  rpc StaffPreferenceFill(StaffPreferenceRequest) returns(StaffPreferenceResponse);
+  rpc StaffPreferenceInsert(StaffPreferenceRequest) returns(StaffPreferenceResponse);
   rpc StaffPreferenceModify(StaffPreferenceRequest) returns(StaffPreferenceResponse);
 }

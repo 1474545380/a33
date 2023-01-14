@@ -1,0 +1,18 @@
+syntax="proto3";
+package pb;
+option go_package="/internal/service;service";
+import "schedulDateModels.proto";
+
+message SchedulDateRequest{
+  string password=1;
+
+}
+
+message SchedulDateDetailResponse{
+  SchedulDateModel SchedulDateDetail=1;
+  uint32 Code=2;
+}
+
+service SchedulDateService{
+  rpc SchedulDateInsert(SchedulDateRequest) returns(SchedulDateDetailResponse);
+}

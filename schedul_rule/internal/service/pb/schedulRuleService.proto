@@ -1,0 +1,25 @@
+syntax="proto3";
+package pb;
+option go_package="/internal/service;service";
+import "schedulRuleModels.proto";
+
+message SchedulRuleRequest{
+  string identity=1;
+  string rule_type=2;
+  string store_identity=3;
+  string rule_date=4;
+}
+
+message SchedulRuleResponse{
+  repeated SchedulRuleModel SchedulRuleDetail=1;
+  uint32 Code=2;
+}
+
+
+service SchedulRuleService{
+  rpc SchedulRule(SchedulRuleRequest) returns(SchedulRuleResponse);
+  rpc SchedulRuleByStoreIdentity(SchedulRuleRequest) returns(SchedulRuleResponse);
+  rpc SchedulRuleInsert(SchedulRuleRequest) returns(SchedulRuleResponse);
+  rpc SchedulRuleModify(SchedulRuleRequest) returns(SchedulRuleResponse);
+  rpc SchedulRuleDelete(SchedulRuleRequest) returns(SchedulRuleResponse);
+}

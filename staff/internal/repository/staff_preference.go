@@ -65,13 +65,14 @@ func (staffPreference *StaffPreference) StaffPreferenceChange(req *service.Staff
 
 // BuildStaffPreference 序列化[]StaffPreference
 func BuildStaffPreference(item []StaffPreference) []*service.StaffPreferenceModel {
-	l := len(item)
-	staffPreferenceModel := make([]*service.StaffPreferenceModel, l)
-	for i, i2 := range item {
-		staffPreferenceModel[i].StaffPreferenceIdentity = i2.StaffPreferenceIdentity
-		staffPreferenceModel[i].PreferenceValue = i2.PreferenceValue
-		staffPreferenceModel[i].PreferenceType = i2.PreferenceType
-		staffPreferenceModel[i].StaffIdentity = i2.StaffIdentity
+	staffPreferenceModel := make([]*service.StaffPreferenceModel, 0)
+	for _, i := range item {
+		staffPreferenceModel = append(staffPreferenceModel, &service.StaffPreferenceModel{
+			StaffPreferenceIdentity: i.StaffPreferenceIdentity,
+			PreferenceType:          i.PreferenceType,
+			StaffIdentity:           i.StaffIdentity,
+			PreferenceValue:         i.PreferenceValue,
+		})
 	}
 	return staffPreferenceModel
 }
