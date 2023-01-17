@@ -23,9 +23,27 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `schedul_rules`;
 CREATE TABLE `schedul_rules` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `rule_type` varchar(255) NOT NULL COMMENT '规则类型；可选值:开店规则、关店规则、客流规则。可扩展',
-  `store_identity` longtext COMMENT '为空时，为系统通用规则。\n不为空时，为门店规则。\n当门店有门店规则时，使用门店规则进行排班，没\n有门店规则时，使用系统通用规则进行排班',
-  `rule_date` text NOT NULL COMMENT '需要开发者自行设计。\n示例:\n- 客流规则:"3.8" 表示按照业务预测数据，每 3.8 个客流必须安排至少一个员工当值\n- 开店规则:"1.5,23.5" 表示开店 1 个半小时前需要 有员工当值，当值员工数为门店面积除以 23.5\n- 关店规则:"2.5,3,13" 表示关店 2 个半小时内需要 有员工当值，当值员工数不小于 3 并且不小于门店 面积除以 13\n为了提高规则的灵活性，建议使用 json 格式保存规 则值，如关店规则: {"after":"2.5","count":"3","fomula":"size/13"}',
+  `area_coefficient` double NOT NULL COMMENT '面积系数',
+  `area_power` double NOT NULL COMMENT '面积幂',
+  `flow_coefficient` double NOT NULL COMMENT '客流系数',
+  `flow_power` double NOT NULL COMMENT '客流幂',
+  `constant` double NOT NULL COMMENT '常数',
+  `min_num` int unsigned NOT NULL COMMENT '最小人数',
+  `restrictions` varchar(255) NOT NULL COMMENT '职业限制',
+  `trigger_time` int unsigned COMMENT '触发时间的id',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `trigger_time` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `trigger_type` varchar(255) NOT NULL COMMENT '触发时间类型，固定日期或者按星期几重复', 
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `fixed_date` date DEFAULT NULL COMMENT '固定日期',
+  `repeat_day` bigint DEFAULT NULL COMMENT '每个星期的重复日期，用7位位图表示',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
